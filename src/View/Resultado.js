@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { Fetch } from "../Utils/Fetch";
 import { Card, Row, Col, Button, Image, Typography } from 'antd';
 import { ArrowLeftOutlined, StarFilled } from '@ant-design/icons';
+import Notfound from "../Utils/notfound.png";
 const { Text, Title } = Typography;
 
 function Resultado(props) {
@@ -39,7 +40,7 @@ function Resultado(props) {
                         let arr = []
                         data?.results?.forEach(element =>
                             element?.known_for?.forEach(movie => {
-                                if (movie.media_type === "movie") {
+                                if (movie?.media_type === "movie") {
                                     arr.push(movie)
                                 }
                             })
@@ -60,7 +61,7 @@ function Resultado(props) {
             } catch (e) {
                 Swal.fire(
                     "Operación Fallida",
-                    `Error inesperado: ${e.message}`,
+                    `Error inesperado: ${e?.message}`,
                     "error"
                 );
             }
@@ -127,7 +128,11 @@ function Resultado(props) {
                                                                 <Image
                                                                     width={100}
                                                                     src="error"
-                                                                    fallback={`https://image.tmdb.org/t/p/w500/${backdrop_path||poster_path}`}
+                                                                    fallback={
+                                                                        backdrop_path === null && poster_path === null
+                                                                            ? Notfound
+                                                                            : `https://image.tmdb.org/t/p/w500/${backdrop_path || poster_path}`
+                                                                    }
                                                                 />
                                                             </Col>
                                                             <Col flex="auto" className="pdl-10 pdr-10">

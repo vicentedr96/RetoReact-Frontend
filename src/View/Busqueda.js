@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
 import { pass } from "../Redux/Actions/validate";
 import { Fetch } from "../Utils/Fetch";
-import { Upload, Row, Col, Typography, message  } from 'antd';
+import { Upload, Row, Col, Typography, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 
@@ -14,7 +14,7 @@ function Busqueda(props) {
   const dispatch = useDispatch();
   const validate = useSelector(state => state.validate);
   const rename = (data) => dispatch(pass(data));
-  const [list, setList] = useState({file:null,ready:false})
+  const [list, setList] = useState({ file: null, ready: false })
   const allowedFiles = ["image/png", "image/jpeg"];
 
   const config = {
@@ -36,30 +36,32 @@ function Busqueda(props) {
         return false;
       }
     },
-    
+
   };
 
-  const FetchSearch = async() => {
+  const FetchSearch = async () => {
     try {
-       let formData = new FormData();
+      let formData = new FormData();
       formData.append("file", list?.file);
       let data = await Fetch("https://whois.nomada.cloud/upload", {
         method: "POST",
-        body:formData ,
+        body: formData,
         headers: {
           "Nomada": `OTNjYjc3ZTEtYTI3MC00MTI0LTg4ZmQtMmU0NWU1MDZjNGZj`
         }
       });
       if (data?.error?.length > 0) {
+        setList({ ...list, ready: false })
         Swal.fire(
           "Respuesta inesperada",
           `${data?.error}`,
           "info"
         );
-      } else {    
+      } else {
         rename({ ...validate, checking: true, name: data?.actorName })
       }
     } catch (e) {
+      setList({ ...list, ready: false })
       Swal.fire(
         "Operación Fallida",
         `Error inesperado: ${e.message}`,
@@ -67,9 +69,8 @@ function Busqueda(props) {
       );
     }
   };
-
   return (
-    <Row justify="center" align="middle" className="height-100 bgGrey">
+    <Row justify="center" align="middle" className="height-vh-100 bgGrey">
       <Col sx={24} md={12} className="bgWhite pd-50">
         <Row>
           <Col span={24}>
