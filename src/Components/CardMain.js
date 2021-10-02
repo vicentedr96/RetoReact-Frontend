@@ -9,11 +9,11 @@ function CardMain({ original_title, vote_average, backdrop_path, overview, relea
             <Col xs={24}>
                 <Row>
                     <Col xs={24} md={12}>
-                        <Title level={4} strong>{original_title || "No disponible"}</Title>
+                        <Title level={4} strong>{original_title}</Title>
                     </Col>
                     <Col xs={24} md={12} className="textAlign-e">
                         <Title level={4} strong>
-                            {vote_average}
+                            {vote_average||"No disponible"}
                             <StarFilled className="clYellow mgl-5" />
                         </Title>
                     </Col>
@@ -34,7 +34,7 @@ function CardMain({ original_title, vote_average, backdrop_path, overview, relea
                         />
                     </Col>
                     <Col flex="auto" className="pdl-10 pdr-10">
-                        <p> {overview || "No disponible"} </p>
+                        <p> {overview||"No disponible"} </p>
                         <Text strong className="clGrey">Fecha de estreno: {release_date || "No disponible"}</Text>
                     </Col>
                 </Row>

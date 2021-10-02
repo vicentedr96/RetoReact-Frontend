@@ -94,7 +94,7 @@ function Resultado(props) {
                                         <Text mark>{gender}</Text>
                                     </Col>
                                     <Col xs={24} className="textAlign-c">
-                                        <Text>Popularidad: {popularity || "No disponible"}</Text>
+                                        <Text>{popularity!==null ? `Popularidad: ${popularity}`: ""}</Text>
                                     </Col>
                                 </Row>
 
