@@ -5,7 +5,8 @@ import { pass, initial } from "../Redux/Actions/validate";
 import Swal from "sweetalert2";
 import { Fetch } from "../Utils/Fetch";
 import { Card, Row, Col, Button, Image, Typography } from 'antd';
-import { ArrowLeftOutlined, StarFilled } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import CardMain from "../Components/CardMain";
 import Notfound from "../Utils/notfound.png";
 const { Text, Title } = Typography;
 
@@ -15,7 +16,6 @@ function Resultado(props) {
     const dispatch = useDispatch();
     const back = () => dispatch(initial());
     const { history } = props;
-
     const onClickBack = () => {
         back();
         history.push(`/`);
@@ -51,9 +51,9 @@ function Resultado(props) {
                             checking: true,
                             gender: (data?.results?.[0]?.gender === 1 ? "MUJER" : "HOMBRE"),
                             popularity: data?.results?.[0]?.popularity,
-                            actorPhoto: `https://image.tmdb.org/t/p/w500/${data?.results?.[0]?.profile_path}`,
+                            actorPhoto: (data?.results?.[0]?.profile_path !== null) ? `https://image.tmdb.org/t/p/w500/${data?.results?.[0]?.profile_path}` : null,
                             page: data?.page,
-                            movies: arr
+                            movies: arr,
                         })
                     }
                 }
@@ -65,7 +65,7 @@ function Resultado(props) {
                     "error"
                 );
             }
-        }; 
+        };
         if (checking === true) {
             FetchSearchMovies();
         }
@@ -75,7 +75,7 @@ function Resultado(props) {
         <Row justify="center" align="middle" className="height-100 bgGrey scroll" >
             <Col sx={24} md={20} className="bgWhite">
                 <div className="site-card-border-less-wrapper">
-                    <Card bordered title={<Button type="primary" onClick={onClickBack} icon={<ArrowLeftOutlined/>}>Regresar</Button>}
+                    <Card bordered title={<Button type="primary" onClick={onClickBack} icon={<ArrowLeftOutlined />}>Regresar</Button>}
                         className="wd-100 pd-0" bodyStyle={{ padding: "0" }}>
                         <Row>
                             <Col xs={24} md={8} className="borderR-2 textAlign-c">
@@ -84,7 +84,7 @@ function Resultado(props) {
                                         <Image
                                             width={200}
                                             src="error"
-                                            fallback={actorPhoto}
+                                            fallback={actorPhoto || Notfound}
                                         />
                                     </Col>
                                     <Col xs={24} className="textAlign-c">
@@ -94,7 +94,7 @@ function Resultado(props) {
                                         <Text mark>{gender}</Text>
                                     </Col>
                                     <Col xs={24} className="textAlign-c">
-                                        <Text>Popularidad: {popularity}</Text>
+                                        <Text>Popularidad: {popularity || "No disponible"}</Text>
                                     </Col>
                                 </Row>
 
@@ -104,47 +104,13 @@ function Resultado(props) {
                                     <Col xs={24} className="textAlign-j borderB-2">
                                         <Title className="mg-0" level={2} strong>Películas:</Title>
                                     </Col>
-                                    <div>
-                                        {movies.map(({ original_title, vote_average, backdrop_path, overview, release_date,poster_path }, index) => {
+                                    {
+                                        movies.map((data, index) => {
                                             return (
-                                                <div key={index}>
-                                                    <Col xs={24}>
-                                                        <Row>
-                                                            <Col xs={24} md={12}>
-                                                                <Title level={4} strong>{original_title||"No disponible"}</Title>
-                                                            </Col>
-                                                            <Col xs={24} md={12} className="textAlign-e">
-                                                                <Title level={4} strong>
-                                                                    {vote_average}
-                                                                    <StarFilled className="clYellow mgl-5" />
-                                                                </Title>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-
-                                                    <Col xs={24}>
-                                                        <Row wrap={false}>
-                                                            <Col flex="none" className="textAlign-c">
-                                                                <Image
-                                                                    width={100}
-                                                                    src="error"
-                                                                    fallback={
-                                                                        backdrop_path === null && poster_path === null
-                                                                            ? Notfound
-                                                                            : `https://image.tmdb.org/t/p/w500/${backdrop_path || poster_path}`
-                                                                    }
-                                                                />
-                                                            </Col>
-                                                            <Col flex="auto" className="pdl-10 pdr-10">
-                                                                <p> {overview||"No disponible"} </p>
-                                                                <Text strong className="clGrey">Fecha de estreno: {release_date||"No disponible"}</Text>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                </div>
+                                                <CardMain key={index} {...data} />
                                             )
-                                        })}
-                                    </div>
+                                        })
+                                    }
                                 </Row>
                             </Col>
                         </Row>

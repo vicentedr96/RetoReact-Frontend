@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 const { Dragger } = Upload;
 const { Title } = Typography;
 
-function Busqueda(props) {
+function Busqueda() {
   const dispatch = useDispatch();
   const validate = useSelector(state => state.validate);
   const rename = (data) => dispatch(pass(data));
@@ -51,7 +51,7 @@ function Busqueda(props) {
         }
       });
       if (data?.error?.length > 0) {
-        setList({ ...list, ready: false })
+        setList((prevState) => ({ ...prevState, ready: false }))
         Swal.fire(
           "Respuesta inesperada",
           `${data?.error}`,
@@ -61,7 +61,7 @@ function Busqueda(props) {
         rename({ ...validate, checking: true, name: data?.actorName })
       }
     } catch (e) {
-      setList({ ...list, ready: false })
+      setList((prevState) => ({ ...prevState, ready: false }))
       Swal.fire(
         "Operación Fallida",
         `Error inesperado: ${e.message}`,
